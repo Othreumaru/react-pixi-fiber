@@ -68,8 +68,45 @@ declare module 'react-pixi-fiber' {
    */
   export type Component<T extends ObjectWithChildren> = ChildlessComponent<T> & ChildrenProperties;
 
+  class BitmapTextClass extends PIXI.Container {
+
+    static registerFont(xml: XMLDocument, texture: PIXI.Texture): any;
+
+    constructor(text: string, style?: any);
+
+    protected _textWidth: number;
+    protected _textHeight: number;
+    textWidth: number;
+    textHeight: number;
+    protected _glyphs: Sprite[];
+    protected _font: string | {
+      name?: string;
+      size?: number;
+    };
+    font: string | {
+      name?: string;
+      size?: number;
+    };
+    protected _text: string;
+    maxWidth: number;
+    maxLineHeight: number;
+    protected _anchor: PIXI.ObservablePoint;
+    dirty: boolean;
+    tint: number;
+    align: string;
+    text: string;
+    anchor: PIXI.Point | number;
+
+    protected updateText(): void;
+    updateTransform(): void;
+    getLocalBounds(): PIXI.Rectangle;
+    protected validate(): void;
+
+    static fonts: any;
+  }
+
   /** `BitmapText` component properties. */
-  export interface BitmapTextProperties extends ChildlessComponent<PIXI.extras.BitmapText & InteractiveComponent> {
+  export interface BitmapTextProperties extends ChildlessComponent<BitmapTextClass & InteractiveComponent> {
     text: string;
   }
 
@@ -100,8 +137,35 @@ declare module 'react-pixi-fiber' {
    */
   export class Graphics extends React.Component<GraphicsProperties> {}
 
+  class ParticleContainerClass extends PIXI.Container {
+    constructor(
+      maxSize?: number,
+      properties?: ParticleContainerProperties,
+      batchSize?: number,
+      autoResize?: boolean,
+    );
+    protected _tint: number;
+    protected tintRgb: number | any[];
+    tint: number;
+    protected _properties: boolean[];
+    protected _maxSize: number;
+    protected _batchSize: number;
+    protected _glBuffers: { [n: number]: WebGLBuffer };
+    protected _bufferUpdateIDs: number[];
+    protected _updateID: number;
+    interactiveChildren: boolean;
+    blendMode: number;
+    autoSize: boolean;
+    roundPixels: boolean;
+    baseTexture: PIXI.BaseTexture;
+
+    setProperties(properties: ParticleContainerProperties): void;
+
+    destroy(options?: any): void;
+  }
+
   /** `ParticleContainer` component properties. */
-  export interface ParticleContainerProperties extends ChildlessComponent<PIXI.particles.ParticleContainer & InteractiveComponent> {}
+  export interface ParticleContainerProperties extends ChildlessComponent<ParticleContainerClass & InteractiveComponent> {}
 
   /**
    * A component wrapper for `PIXI.particles.ParticleContainer`.
@@ -132,8 +196,41 @@ declare module 'react-pixi-fiber' {
    */
   export class Text extends React.Component<TextProperties> {}
 
+  class TilingSpriteClass extends PIXI.Sprite {
+    constructor(texture: PIXI.Texture, width?: number, height?: number);
+
+    tileTransform: PIXI.Transform;
+    protected _width: number;
+    protected _height: number;
+    protected _canvasPattern: CanvasPattern;
+    uvTransform: PIXI.TextureMatrix;
+    uvRespectAnchor: boolean;
+
+    clampMargin: number;
+    tileScale: PIXI.Point | PIXI.ObservablePoint;
+    tilePosition: PIXI.Point | PIXI.ObservablePoint;
+
+    multiplyUvs(uvs: Float32Array, out: Float32Array): Float32Array;
+    protected _onTextureUpdate(): void;
+    protected _renderWebGL(renderer:  any): void;
+    protected _renderCanvas(renderer: any): void;
+    protected _calculateBounds(): void;
+    getLocalBounds(rect?: PIXI.Rectangle): PIXI.Rectangle;
+    containsPoint(point: PIXI.Point): boolean;
+    destroy(options?: any): void;
+
+    static from(
+      source:  any,
+      width?: number,
+      height?: number,
+    ): TilingSpriteClass;
+
+    width: number;
+    height: number;
+  }
+
   /** `TilingSprite` component properties. */
-  export interface TilingSpriteProperties extends ChildlessComponent<PIXI.extras.TilingSprite & InteractiveComponent> {
+  export interface TilingSpriteProperties extends ChildlessComponent<TilingSpriteClass & InteractiveComponent> {
     texture: PIXI.Texture;
   }
 
